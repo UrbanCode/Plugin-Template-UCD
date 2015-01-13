@@ -31,6 +31,8 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'groovy'
 
+defaultTasks 'distPlugin'
+
 def pluginName = 'helloworld'
 
 configurations {
