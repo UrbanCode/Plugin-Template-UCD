@@ -47,7 +47,7 @@ repositories {
 
 dependencies {
     // groovy-plugin-utils pulls down groovy-all as a transitive dependency for the 'compile' configuration
-    compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:1.0'
+    compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:1.0-SNAPSHOT'
 //    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.6'
 //    testCompile group: 'junit', name: 'junit', version: '4.11'
 }
@@ -60,12 +60,20 @@ sourceSets {
     }
 }
 
+task copyDeps(type: Copy) {
+    from configurations.runtime
+    into 'lib'
+}
+
 task distPlugin(type: Zip, dependsOn: 'compileGroovy') {
-    from sourceSets.main.groovy.srcDirs
+    def releaseVersion = apiVersion + "." + pluginVersion
+    from(sourceSets.main.groovy.srcDirs) {
+        filter(ReplaceTokens, tokens: [API_VERSION: apiVersion, RELEASE_VERSION: releaseVersion])
+    }
     into('lib') {
         from configurations.runtime
     }
-    def releaseVersion = apiVersion + "." + pluginVersion
-    filter(ReplaceTokens, tokens: [API_VERSION: apiVersion, RELEASE_VERSION: releaseVersion])
     archiveName = "${pluginName}-${releaseVersion}.zip"
 }
+
+task cleanAll(dependsOn: ['clean', 'cleanCopyDeps', 'cleanDistPlugin'])

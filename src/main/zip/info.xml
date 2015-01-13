@@ -135,5 +135,9 @@
     <release-note plugin-version="1">
       Installing this plugin will give you access to the steps listed below. These steps can be used when designing a component process.
     </release-note>
+
+    <release-note plugin-version="2">
+      Added a name property to the Hello World step
+    </release-note>
   </release-notes>
 </pluginInfo>
