@@ -28,7 +28,7 @@
 
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="classes:lib/groovy-plugin-utils-1.0-SNAPSHOT.jar"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.0.jar"/>
       <arg file="helloworld.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
