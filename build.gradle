@@ -33,8 +33,6 @@ apply plugin: 'groovy'
 
 defaultTasks 'distPlugin'
 
-def pluginName = 'helloworld'
-
 configurations {
     // Remove the groovy-all jar from runtime dependencies
     runtime.exclude module: 'groovy-all'
@@ -42,7 +40,6 @@ configurations {
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
