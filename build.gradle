@@ -1,0 +1,69 @@
+/* The Groovy plugin for Gradle assumes the following layout
+ * src/main/java
+ * src/main/resources
+ * src/main/groovy
+ *
+ * src/test/java
+ * src/test/resources
+ * src/test/groovy
+ *
+ * src/<sourceSet>/java
+ * src/<sourceSet>/resources
+ * src/<sourceSet>/groovy
+ *
+ * You can override or create a new sourceSet with the following snippet:
+ *
+ * sourceSets {
+ *     main {
+ *         // We can override src/main/groovy to also add src/main/zip
+ *         groovy {
+ *             srcDirs = ['src/main/groovy', 'src/main/zip']
+ *         }
+ *     }
+ *     mySourceSet {
+ *         groovy {
+ *             srcDirs = ['src/myDir/groovy']
+ *         }
+ *     }
+ * }
+ */
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'groovy'
+
+def pluginName = 'helloworld'
+
+configurations {
+    // Remove the groovy-all jar from runtime dependencies
+    runtime.exclude module: 'groovy-all'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    // groovy-plugin-utils pulls down groovy-all as a transitive dependency for the 'compile' configuration
+    compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:1.0'
+//    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.6'
+//    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy', 'src/main/zip']
+        }
+    }
+}
+
+task distPlugin(type: Zip, dependsOn: 'compileGroovy') {
+    from sourceSets.main.groovy.srcDirs
+    into('lib') {
+        from configurations.runtime
+    }
+    def releaseVersion = apiVersion + "." + pluginVersion
+    filter(ReplaceTokens, tokens: [API_VERSION: apiVersion, RELEASE_VERSION: releaseVersion])
+    archiveName = "${pluginName}-${releaseVersion}.zip"
+}
