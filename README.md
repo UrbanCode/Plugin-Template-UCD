@@ -9,4 +9,4 @@ for our plugins can be found in the [IBM UrbanCode Build Help Center](http://www
 ### Compiling Source
 `gradle`
 
-The helloworld plugin .zip file can be found in build/distributables once the project has been built.
+The helloworld plugin .zip file can be found in build/distributions once the project has been built.
