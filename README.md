@@ -1,4 +1,4 @@
-# UrbanCode Plugin Template
+# IBM UrbanCode Deploy Plugin Template
 ---
 
 The UrbanCode Plugin Template project is a sample project that can be forked and used as a base for all community plugins.
