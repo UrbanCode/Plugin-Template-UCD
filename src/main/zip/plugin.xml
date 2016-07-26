@@ -5,7 +5,7 @@
   <header>
     <identifier id="com.urbancode.air.plugin.helloworld" version="@API_VERSION@" name="Hello World"/>
     <description>The Hello World plugin echoes out "Hello World"</description>
-    <tag>Templatenan/Hello World</tag>
+    <tag>Template/Hello World</tag>
   </header>
 
   <step-type name="Hello World">
