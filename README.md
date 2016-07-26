@@ -9,3 +9,6 @@ Create your own plug-in by following our [beginner](https://developer.ibm.com/ur
 `gradle`
 
 The helloworld plug-in .zip file can be found in build/distributions after you build the project.
+
+### License
+This plugin is protected under the [Eclipse Public 1.0 License](http://www.eclipse.org/legal/epl-v10.html)
