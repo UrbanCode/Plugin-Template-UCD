@@ -69,25 +69,45 @@
 		 def outputContent_Properties = props['outputContentProperties']
 		 def outputContent_Security = props['outputContentSecurity']
 		 def outputContent_FurtherDetails = props['outputContentFurtherDetails']
+		 def outputFileName = props['outputFileName']
+		 def outputResultToWindow = props['outputResultToWindow']
  
 		 Resources resources = new Resources(serverConnection)
 		 def httpProcess = new httpRequestProcess(serverConnection, true)
 		 
 		 resources.getResources(rootPath, httpProcess, nameFilter)
 		 
-		 println("=======================================================")
-		 resources.setRequiredPropertiesAndPathType(outputContent_Properties, outputContent_Security, outputContent_FurtherDetails, pathType)
-		 resources.ListResources(rootPath)
-		 
-		 resources.getNumberOfResources()
-		 
-		 def numberResources = resources.getNumberOfResources()
-		 
-		 println("Number resources found : " + numberResources)
-
-		 apTool.setOutputProperty("NumberResources", numberResources.toString())
-		  
-		 apTool.setOutputProperties()
+		 if ((outputFileName == "") && (outputResultToWindow == "false")) {
+			 println("ERROR : No output option specified")
+			 println("Please enter a filename to hold the output, or select the option to display the result in the output window or in an output property.")
+		 } else {	 
+			 println("=======================================================")
+			 resources.setRequiredPropertiesAndPathType(outputContent_Properties, outputContent_Security, outputContent_FurtherDetails, pathType)
+			 def outputData = resources.ListResources(rootPath)
+			 
+			 resources.getNumberOfResources()
+			 
+			 def numberResources = resources.getNumberOfResources()
+			 
+			 if (outputFileName != "") {
+				 
+				 def filename = outputFileName
+				 def file = new File(filename)
+				 def w = file.newWriter()
+	
+				 w << outputData
+				 w.close()
+				 apTool.setOutputProperty("OutputFile", outputFileName)
+			 }
+			 if (outputResultToWindow == "true") {
+				 println("Number resources found : " + numberResources)
+				 print(outputData)
+			 }
+			 
+			 apTool.setOutputProperty("NumberResources", numberResources.toString())
+			  
+			 apTool.setOutputProperties()
+		 }
 	 }
 	 def findEmptyProperties() {
 		 def rootPath = props['resourceRoot']
@@ -95,6 +115,8 @@
 		 def pathType = props['pathType']
 		 def emptyResourceProperties = props['findEmptyResourceProperties']
 		 def emptyResourceRoleProperties = props['findEmptyResourceRoleProperties']
+		 def outputFileName = props['outputFileName']
+		 def outputResultToWindow = props['outputResultToWindow']
 		 
 		 def missingScope = ""
 		 
@@ -102,58 +124,96 @@
 		 def httpProcess = new httpRequestProcess(serverConnection, true)
 		 
 		 resources.getResources(rootPath, httpProcess, nameFilter)
-
-		 println("=======================================================")
-		 resources.setRequiredPropertiesAndPathType("false", "false", "false", pathType)	 
-		  
-		 if ((emptyResourceProperties == "true") && (emptyResourceRoleProperties == "true")) {
-			 missingScope = "all"
-		 } else if ((emptyResourceProperties == "true") && (emptyResourceRoleProperties == "false")) {
-		 	missingScope = "resource"
-		 } else if ((emptyResourceProperties == "false") && (emptyResourceRoleProperties == "true")) {
-		 	missingScope = "role"
-		 } 
-		 		 
-		 resources.findEmptyProperties(rootPath, missingScope)
 		 
-		 def emptyResProps = resources.getNumberEmptyResourceProperties()
-		 def emptyResRoleProps = resources.getNumberEmptyResourceRoleProperties()
-		 
-		 println("Empty resource properties      : " + emptyResProps)
-		 println("Empty resource role properties : " + emptyResRoleProps)
-		 
-		 apTool.setOutputProperty("EmptyResProps", emptyResProps.toString())
-		 apTool.setOutputProperty("EmptyResRoleProps", emptyResRoleProps.toString())
-		  
-		 apTool.setOutputProperties()
+		 if ((outputFileName == "") && (outputResultToWindow == "false")) {
+			 println("ERROR : No output option specified")
+			 println("Please enter a filename to hold the output, or select the option to display the result in the output window or in an output property.")
+		 } else {
+			 println("=======================================================")
+			 resources.setRequiredPropertiesAndPathType("false", "false", "false", pathType)	 
+			  
+			 if ((emptyResourceProperties == "true") && (emptyResourceRoleProperties == "true")) {
+				 missingScope = "all"
+			 } else if ((emptyResourceProperties == "true") && (emptyResourceRoleProperties == "false")) {
+			 	missingScope = "resource"
+			 } else if ((emptyResourceProperties == "false") && (emptyResourceRoleProperties == "true")) {
+			 	missingScope = "role"
+			 } 
+			 		 
+			 def outputData = resources.findEmptyProperties(rootPath, missingScope)
+			 
+			 def emptyResProps = resources.getNumberEmptyResourceProperties()
+			 def emptyResRoleProps = resources.getNumberEmptyResourceRoleProperties()
+			 
+			 if (outputResultToWindow == "true") {
+				 println("Empty resource properties      : " + emptyResProps)
+				 println("Empty resource role properties : " + emptyResRoleProps)
+				 print(outputData)
+			 }
+			 
+			 apTool.setOutputProperty("EmptyResProps", emptyResProps.toString())
+			 apTool.setOutputProperty("EmptyResRoleProps", emptyResRoleProps.toString())
+			 
+			 if (outputFileName != "") {
+				 
+				 def filename = outputFileName
+				 def file = new File(filename)
+				 def w = file.newWriter()
+	
+				 w << outputData
+				 w.close()
+				 apTool.setOutputProperty("OutputFile", outputFileName)
+			 }
+			  
+			 apTool.setOutputProperties()
+		 }
 	 }
 	 def searchProperties() {
 		 def rootPath = props['resourceRoot']
 		 def nameFilter = props['nameFilter']
 		 def pathType = props['pathType']
 		 def searchTerm = props['searchTerm']
+		 def outputFileName = props['outputFileName']
+		 def outputResultToWindow = props['outputResultToWindow']
 		 		 
 		 Resources resources = new Resources(serverConnection)
 		 def httpProcess = new httpRequestProcess(serverConnection, true)
 		 
 		 resources.getResources(rootPath, httpProcess, nameFilter)
-
-		 println("=======================================================")
-		 resources.setRequiredPropertiesAndPathType("false", "false", "false", pathType)
-		  				  
-		 resources.searchForProperty(rootPath, searchTerm)
 		 
-		 def foundResProps = resources.getNumberFoundResourceProperties()
-		 def foundResRoleProps = resources.getNumberFoundResourceRoleProperties()
-		 
-		 println("Found resource properties      : " + foundResProps)
-		 println("Found resource role properties : " + foundResRoleProps)
-		 
-		 apTool.setOutputProperty("FoundResProps", foundResProps.toString())
-		 apTool.setOutputProperty("FoundResRoleProps", foundResRoleProps.toString())
-		  
-		 apTool.setOutputProperties()
-		 
-		 
+		 if ((outputFileName == "") && (outputResultToWindow == "false")) {
+			 println("ERROR : No output option specified")
+			 println("Please enter a filename to hold the output, or select the option to display the result in the output window or in an output property.")
+		 } else {
+			 println("=======================================================")
+			 resources.setRequiredPropertiesAndPathType("false", "false", "false", pathType)
+			  				  
+			 def outputData = resources.searchForProperty(rootPath, searchTerm)
+			 
+			 def foundResProps = resources.getNumberFoundResourceProperties()
+			 def foundResRoleProps = resources.getNumberFoundResourceRoleProperties()
+			 
+			 if (outputResultToWindow == "true") {
+			 
+				 println("Found resource properties      : " + foundResProps)
+				 println("Found resource role properties : " + foundResRoleProps)
+				 print(outputData)
+			 }
+			 	 
+			 apTool.setOutputProperty("FoundResProps", foundResProps.toString())
+			 apTool.setOutputProperty("FoundResRoleProps", foundResRoleProps.toString())
+			 
+			 if (outputFileName != "") {
+				 
+				 def filename = outputFileName
+				 def file = new File(filename)
+				 def w = file.newWriter()
+	
+				 w << outputData
+				 w.close()
+				 apTool.setOutputProperty("OutputFile", outputFileName)
+			 }
+			 apTool.setOutputProperties()
+		 }		 
 	 }
  } 

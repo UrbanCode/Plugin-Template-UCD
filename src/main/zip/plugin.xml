@@ -1,136 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:server="http://www.urbancode.com/PluginServerXMLSchema_v1">
-    <header>
-      <identifier id="com.urbancode.air.plugin.ResourceUtilities" name="Resource Utilities" version="@API_VERSION@" />
-      	<description>
-  			Resource tree management utilities.
-  	 	</description>
-      <tag>IBM UrbanCode Deploy/Resources/Utilities</tag>
-      <server:required-server-version>6.0.1.0</server:required-server-version>
-    </header>
+<!--
+- Licensed Materials - Property of IBM Corp.
+- IBM UrbanCode Build
+- IBM UrbanCode Deploy
+- IBM UrbanCode Release
+- IBM AnthillPro
+- (c) Copyright IBM Corporation 2002, 2013. All Rights Reserved.
+-
+- U.S. Government Users Restricted Rights - Use, duplication or disclosure restricted by
+- GSA ADP Schedule Contract with IBM Corp.
+-->
+<plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:server="http://www.urbancode.com/PluginServerXMLSchema_v1">
+  <header>
+    <identifier id="com.urbancode.air.plugin.ResourceUtilities" name="Resource Utilities" version="5"/>
+    	<description>
+			This plugin provides steps that facilitate operations across sections of the resource tree. 
+			It is intended that this plugin will supplement the existing functions provided by the IBM supplied plugin called ‘IBM UrbanCode Deploy Resources’. 
+			The resource utilities plugin steps documented here are to be found in a folder called ‘Utilities’ under the IBM UrbanCode Deploy/Resources 
+			folder in the component process step palette.
+	 	</description>
+    <tag>IBM UrbanCode Deploy/Resources/Utilities</tag>
+    <server:required-server-version>6.0.1.0</server:required-server-version>
+  </header>
+  
+<!--
+Steps within this plugin :
 
-  <!--
-  Steps to create within this plugin :
+List resources – display information about the hierarchy of resources from a specific root point.
+Find resources with properties that have missing values – display resources for which there are resource properties or resource role properties with missing values.
+Search and report property values – Find resources with resource properties or resource role properties of a specific name and report the value of the property.
 
-  List resources
-  Find resources with missing values
-  Search and report property
-  -->
-
-    <step-type name="List resources">
-      <description>List UrbanCode Deploy resources under a specific root resource.</description>
-      <properties>
-        <property name="resourceRoot" required="true">
-          <property-ui type="textBox" label="Resource tree root" description="The resource tree node from which the list is to be generated."/>
-        </property>
-        <property name="nameFilter">
-          <property-ui type="textBox" label="Name filter" description="Restrict the resources reported to just those that contain the filter word."/>
-        </property>
-        <property name="pathType" required="true">
-          <property-ui type="selectBox" label="Path type" default-value="relative" description="The method for reporting the path of a resource."/>
-    			<value label="Relative">relative</value>
-    			<value label="Full">full</value>
-        </property>
-        <property name="outputContentProperties">
-          <property-ui type="checkBox" label="Include properties" default-value="false" description="Include resource and resource role properties."/>
-    	  </property>
-    	  <property name="outputContentSecurity">
-          <property-ui type="checkBox" label="Include security" default-value="false" description="Include security and impersonation properties."/>
-    	  </property>
-        <property name="outputContentFurtherDetails">
-          <property-ui type="checkBox" label="Include further details" default-value="false" description="Include other properties such as description, status, type, etc."/>
-    	  </property>
-      </properties>
-      <post-processing><![CDATA[
-          if (properties.get("exitCode") != 0) {
-              properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
-          }
-          else {
-              properties.put("Status", "Success");
-          }
-       ]]></post-processing>
-      <command program="${GROOVY_HOME}/bin/groovy">
-        <arg value="-cp"/>
-        <arg path="classes:lib/HttpComponents-Util.jar;lib/jettison-1.1.jar;lib/commons-collections.jar;lib/uDeployRestClient.jar;lib/http-builder-0.7-uc.jar;lib/xml-resolver.jar"/>
-        <arg file="listResources.groovy"/>
-        <arg file="${PLUGIN_INPUT_PROPS}"/>
-        <arg file="${PLUGIN_OUTPUT_PROPS}"/>
-      </command>
-    </step-type>
-
-
-
-    <step-type name="Find properties without values">
-      <description>Find resource and / or resource role properties that do not have a value (within a given resource tree scope).</description>
-      <properties>
-        	<property name="resourceRoot" required="true">
-          	<property-ui type="textBox" label="Resource tree root" description="The resource tree node from which the search will be performed."/>
-        	</property>
-        	<property name="nameFilter">
-          	<property-ui type="textBox" label="Name filter" description="Restrict the resources examined to just those that contain the filter word."/>
-        	</property>
-        	<property name="pathType" required="true">
-          	<property-ui type="selectBox" label="Path type" default-value="relative" description="The method for reporting the path of a resource."/>
-    				<value label="Relative">relative</value>
-    				<value label="Full">full</value>
-        	</property>
-  		<property name="findEmptyResourceProperties">
-          	<property-ui type="checkBox" label="Resource properties" default-value="false" description="Look for resource properties with missing values."/>
-    	  	</property>
-  		<property name="findEmptyResourceRoleProperties">
-          	<property-ui type="checkBox" label="Resource role roperties" default-value="false" description="Look for resource role properties with missing values."/>
-    	  	</property>
-      </properties>
-      <post-processing><![CDATA[
-          if (properties.get("exitCode") != 0) {
-              properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
-          }
-          else {
-              properties.put("Status", "Success");
-          }
-       ]]></post-processing>
-      <command program="${GROOVY_HOME}/bin/groovy">
-        <arg value="-cp"/>
-        <arg path="classes:lib/HttpComponents-Util.jar;lib/jettison-1.1.jar;lib/commons-collections.jar;lib/uDeployRestClient.jar;lib/http-builder-0.7-uc.jar;lib/xml-resolver.jar"/>
-        <arg file="findEmptyProperties.groovy"/>
-        <arg file="${PLUGIN_INPUT_PROPS}"/>
-        <arg file="${PLUGIN_OUTPUT_PROPS}"/>
-      </command>
-    </step-type>
-
-
-    <step-type name="Find specific properties">
-      <description>Find instances of specific properties on resources and report the values.</description>
-      <properties>
-        	<property name="resourceRoot" required="true">
-          	<property-ui type="textBox" label="Resource tree root" description="The resource tree node from which the search will be performed."/>
-        	</property>
-        	<property name="nameFilter">
-          	<property-ui type="textBox" label="Name filter" description="Restrict the resources examined to just those that contain the filter word."/>
-        	</property>
-        	<property name="pathType" required="true">
-          	<property-ui type="selectBox" label="Path type" default-value="relative" description="The method for reporting the path of a resource."/>
-  	  			<value label="Relative">relative</value>
-    				<value label="Full">full</value>
-        	</property>
-  		<property name="searchTerm">
-          	<property-ui type="textBox" label="Search term" description="The property name (or part of property name) to find."/>
-    	  	</property>
-      </properties>
-      <post-processing><![CDATA[
-          if (properties.get("exitCode") != 0) {
-              properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
-          }
-          else {
-              properties.put("Status", "Success");
-          }
-       ]]></post-processing>
-      <command program="${GROOVY_HOME}/bin/groovy">
-        <arg value="-cp"/>
-        <arg path="classes:lib/HttpComponents-Util.jar;lib/jettison-1.1.jar;lib/commons-collections.jar;lib/uDeployRestClient.jar;lib/http-builder-0.7-uc.jar;lib/xml-resolver.jar"/>
-        <arg file="searchProperties.groovy"/>
-        <arg file="${PLUGIN_INPUT_PROPS}"/>
-        <arg file="${PLUGIN_OUTPUT_PROPS}"/>
-      </command>
-    </step-type>
+-->  
+  
+  <step-type name="List resources">
+    <description>List UrbanCode Deploy resources under a specific root resource.</description>
+    <properties>
+      <property name="resourceRoot" required="true">
+        <property-ui type="textBox" label="Resource tree root" description="The resource tree node from which the list is to be generated."/>
+      </property>
+      <property name="nameFilter">
+        <property-ui type="textBox" label="Name filter" description="Restrict the resources reported to just those that contain the filter word."/>
+      </property>
+      <property name="pathType" required="true">
+        <property-ui type="selectBox" label="Path type" default-value="relative" description="The method for reporting the path of a resource."/>
+  			<value label="Relative">relative</value>
+  			<value label="Full">full</value>
+      </property>
+      <property name="outputContentProperties">
+        <property-ui type="checkBox" label="Include properties" default-value="false" description="Include resource and resource role properties."/>
+  	  </property>
+  	  <property name="outputContentSecurity">
+        <property-ui type="checkBox" label="Include security" default-value="false" description="Include security and impersonation properties."/>
+  	  </property>	
+      <property name="outputContentFurtherDetails">
+        <property-ui type="checkBox" label="Include further details" default-value="false" description="Include other properties such as description, status, type, etc."/>
+  	  </property>	
+  	  <property name="outputFileName">
+        <property-ui type="textBox" label="Output filename" description="The name of a file to hold the generated output."/>
+  	  </property>
+      <property name="outputResultToWindow">
+      	<property-ui type="checkBox" label="Output to window" default-value="true" description="Include results of the command in the step results command window."/>
+  	  </property>	 	   
+    </properties>    
+    <post-processing><![CDATA[
+        if (properties.get("exitCode") != 0) {
+            properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+        }
+        else {
+            properties.put("Status", "Success");
+        }
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>     
+      <arg path="classes:lib/HttpComponents-Util.jar;lib/jettison-1.1.jar;lib/commons-collections.jar;lib/uDeployRestClient.jar;lib/http-builder-0.7-uc.jar;lib/xml-resolver.jar"/>
+      <arg file="listResources.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+  
+  
+  
+  <step-type name="Find properties without values">
+    <description>Find resource and / or resource role properties that do not have a value (within a given resource tree scope).</description>
+    <properties>
+      	<property name="resourceRoot" required="true">
+        	<property-ui type="textBox" label="Resource tree root" description="The resource tree node from which the search will be performed."/>
+      	</property>
+      	<property name="nameFilter">
+        	<property-ui type="textBox" label="Name filter" description="Restrict the resources examined to just those that contain the filter word."/>
+      	</property>   
+      	<property name="pathType" required="true">
+        	<property-ui type="selectBox" label="Path type" default-value="relative" description="The method for reporting the path of a resource."/>
+  				<value label="Relative">relative</value>
+  				<value label="Full">full</value>
+      	</property>      	   	
+		<property name="findEmptyResourceProperties">
+        	<property-ui type="checkBox" label="Resource properties" default-value="false" description="Look for resource properties with missing values."/>
+  	  	</property>
+		<property name="findEmptyResourceRoleProperties">
+        	<property-ui type="checkBox" label="Resource role roperties" default-value="false" description="Look for resource role properties with missing values."/>
+  	  	</property>   
+  	  	<property name="outputFileName">
+        	<property-ui type="textBox" label="Output filename" description="The name of a file to hold the generated output."/>
+  	  </property>    
+      <property name="outputResultToWindow">
+      	<property-ui type="checkBox" label="Output to window" default-value="true" description="Include other results of the command in the step results command window."/>
+  	  </property>	 	   	        
+    </properties>
+    <post-processing><![CDATA[
+        if (properties.get("exitCode") != 0) {
+            properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+        }
+        else {
+            properties.put("Status", "Success");
+        }
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/HttpComponents-Util.jar;lib/jettison-1.1.jar;lib/commons-collections.jar;lib/uDeployRestClient.jar;lib/http-builder-0.7-uc.jar;lib/xml-resolver.jar"/>
+      <arg file="findEmptyProperties.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+  
+  
+  <step-type name="Find specific properties">
+    <description>Find instances of specific properties on resources and report the values.</description>
+    <properties>
+      	<property name="resourceRoot" required="true">
+        	<property-ui type="textBox" label="Resource tree root" description="The resource tree node from which the search will be performed."/>
+      	</property>
+      	<property name="nameFilter">
+        	<property-ui type="textBox" label="Name filter" description="Restrict the resources examined to just those that contain the filter word."/>
+      	</property>   
+      	<property name="pathType" required="true">
+        	<property-ui type="selectBox" label="Path type" default-value="relative" description="The method for reporting the path of a resource."/>
+	  			<value label="Relative">relative</value>
+  				<value label="Full">full</value>
+      	</property>      	   	
+		<property name="searchTerm" required="true">
+        	<property-ui type="textBox" label="Search term" description="The property name (or part of property name) to find."/>
+  	  	</property>
+  	  	<property name="outputFileName">
+        	<property-ui type="textBox" label="Output filename" description="The name of a file to hold the generated output."/>
+  	  	</property>  
+      <property name="outputResultToWindow">
+      	<property-ui type="checkBox" label="Output to window" default-value="true" description="Include other results of the command in the step results command window."/>
+  	  </property>	   	  	
+    </properties>
+    <post-processing><![CDATA[
+        if (properties.get("exitCode") != 0) {
+            properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+        }
+        else {
+            properties.put("Status", "Success");
+        }
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/HttpComponents-Util.jar;lib/jettison-1.1.jar;lib/commons-collections.jar;lib/uDeployRestClient.jar;lib/http-builder-0.7-uc.jar;lib/xml-resolver.jar"/>
+      <arg file="searchProperties.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>  
 </plugin>

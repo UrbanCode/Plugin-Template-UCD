@@ -280,7 +280,8 @@ public class Resources {
 		}
 		return(maxKeyLength)
 	}
-	public void ListResources(String rootPath) {
+	public String ListResources(String rootPath) {
+		def outputString = ""
 		Resources.each { resourceItem ->
 			def detailsSlurper = new JsonSlurper()
 			def detailsJSONObject = resourceItem.getJSON()
@@ -300,7 +301,7 @@ public class Resources {
 							// Display the full path
 
 							if (requiredPathType.get("full")) {
-								println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s", "", item, detailsJSONObject.get(item)))
+								outputString += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s\n", "", item, detailsJSONObject.get(item))
 							}
 
 							// Display the relative path
@@ -312,16 +313,16 @@ public class Resources {
 								} else {
 									relativePath = ". <root path object> "
 								}
-								println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s", "", "relative path", relativePath))
+								outputString += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s\n", "", "relative path", relativePath)
 							}
 						} else {
-							println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s", "", item, detailsJSONObject.get(item)))
+							outputString += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s\n", "", item, detailsJSONObject.get(item))
 						}
 					}
 				}
 			}
 
-			println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+			outputString += "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 
 			keys = detailsJSONObject.keys()
 
@@ -329,35 +330,35 @@ public class Resources {
 			    String key = (String) keys.next()
 			    if (detailsJSONObject.get(key) instanceof JSONObject ) {
 					if(checkRequiredProperties(key)) {
-						println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s", "", key))
-						displayJSONObject(detailsJSONObject.get(key), displayDepth)
+						outputString += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s\n", "", key)
+						outputString += displayJSONObject(detailsJSONObject.get(key), displayDepth)
 					}
 			    } else if (detailsJSONObject.get(key) instanceof JSONArray ) {
 					if(checkRequiredProperties(key)) {
-						println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s", "", key))
-						displayJSONArray(detailsJSONObject.get(key), displayDepth)
+						outputString += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s\n", "", key)
+						outputString += displayJSONArray(detailsJSONObject.get(key), displayDepth)
 					}
 			    } else if (key == "resourceProperties") {
 					if(checkRequiredProperties(key)) {
-						println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s", "", "resourceProperties"))
+						outputString += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s\n", "", "resourceProperties")
 						def resourcePropertiesSlurper = new JsonSlurper()
 						JSONObject resourcePropertiesJSONObject = resourcePropertiesSlurper.parseText(detailsJSONObject.get(key).toString())
 
-						println(resourcePropertiesJSONObject.toString())
-						displayJSONObject(resourcePropertiesJSONObject, displayDepth)
+						outputString += displayJSONObject(resourcePropertiesJSONObject, displayDepth)
 					}
 				} else if (!displayOrder.contains(key)) {
 					if (checkRequiredProperties(key)) {
-						println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s", "", key, detailsJSONObject.get(key)))
+						outputString += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s\n", "", key, detailsJSONObject.get(key))
 					}
 				}
 			}
-
-			println("================================================================================")
+			outputString += "================================================================================\n"
 		}
+		return(outputString)
 	}
 
-	private displayJSONObject(JSONObject object, Integer displayDepth) {
+	private String displayJSONObject(JSONObject object, Integer displayDepth) {
+		def outputText = ""
 		displayDepth += 2
 
 		Iterator<?> keys = object.keys()
@@ -366,36 +367,39 @@ public class Resources {
 			while( keys.hasNext() ) {
 				String key = (String) keys.next();
 				if ( object.get(key) instanceof JSONObject ) {
-					println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s", "", key))
-					displayJSONObject(object.get(key), displayDepth)
+					outputText += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s\n", "", key)
+					outputText += displayJSONObject(object.get(key), displayDepth)
 				} else if (object.get(key) instanceof JSONArray ) {
-					println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s", "", key))
-					displayJSONArray(object.get(key), displayDepth)
+					outputText += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s\n", "", key)
+					outputText += displayJSONArray(object.get(key), displayDepth)
 				} else {
-					println(sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s", "", key, object.get(key)))
+					outputText += sprintf("%-${displayDepth}s-- %-${displayKeyValuePadding}s -> %s\n", "", key, object.get(key))
 				}
 			}
 			def padDepth = 80 - displayDepth
-			println(sprintf("%-${displayDepth}s%${padDepth}.${padDepth}s", "", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"))
+			outputText += sprintf("%-${displayDepth}s%${padDepth}.${padDepth}s\n", "", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 		}
 		displayDepth -= 2
+		return(outputText)
 	}
 
-	private displayJSONArray(JSONArray array, Integer displayDepth) {
+	private String displayJSONArray(JSONArray array, Integer displayDepth) {
+		def outputText = ""
 		displayDepth += 2
 
 		for (int i = 0; i < array.length(); i++) {
   			JSONObject arrayObject = array.getJSONObject(i)
 
 			if (arrayObject instanceof JSONObject ) {
-				displayJSONObject(arrayObject, displayDepth)
+				outputText += displayJSONObject(arrayObject, displayDepth)
 			} else if (arrayObject instanceof JSONArray ) {
-				displayJSONArray(arrayObject, displayDepth)
+				outputText += displayJSONArray(arrayObject, displayDepth)
 			} else {
-				println("What's this ... ?")
+				outputText += "What's this ... ?\n"
 			}
 		}
 		displayDepth -= 2
+		return(outputText)
 	}
 
 	public int getNumberOfResources() { return Resources.size() }
@@ -403,9 +407,10 @@ public class Resources {
 	public int getNumberEmptyResourceProperties() { return emptyResourceProperties }
 	public int getNumberEmptyResourceRoleProperties() { return emptyResourceRoleProperties }
 	
-	public void findEmptyProperties(String rootPath, String scope) {
+	public String findEmptyProperties(String rootPath, String scope) {
 		emptyResourceProperties = 0
 		emptyResourceRoleProperties = 0
+		def outputString = ""
 		
 		Resources.each { resourceItem ->
 			def detailsSlurper = new JsonSlurper()
@@ -480,20 +485,20 @@ public class Resources {
 				}
 			}
 			if ((missingRolePropValue == true) || (missingResourcePropValue == true)) {
-				println("Resource name : " + detailsJSONObject.name)
+				outputString += "Resource name : " + detailsJSONObject.name + "\n"
 				if (requiredPathType.get("full")) {
-					println("Resource path : " + detailsJSONObject.path)
+					outputString += "Resource path : " + detailsJSONObject.path + "\n"
 				}
 				if (requiredPathType.get("relative")) {
 					if (detailsJSONObject.path.length() > rootPath.length()) {
 						def relativePath = detailsJSONObject.path.substring(rootPath.length())
-						println("Resource path : " + relativePath)
+						outputString += "Resource path : " + relativePath + "\n"
 					}
 				}
 			}
 			if ((scope == "role") || (scope == "all")) {
 				if (missingRolePropValue == true) {
-					println("Resource role properties with missing values .....")
+					outputString += "Resource role properties with missing values .....\n" 
 
 					keys = roleProps.keys()
 
@@ -502,7 +507,7 @@ public class Resources {
 							String key = (String) keys.next();
 
 							if (roleProps.get(key).length() == 0) {
-								println(sprintf(" -- %s", key))
+								outputString += sprintf(" -- %s\n", key)
 								emptyResourceRoleProperties++
 							}
 						}
@@ -511,7 +516,7 @@ public class Resources {
 			}
 			if ((scope == "resource") || (scope == "all")) {
 				if (missingResourcePropValue == true) {
-					println("Resource properties with missing values .....")
+					outputString += "Resource properties with missing values .....\n"
 
 					resourceProps = detailsJSONObject.get("resourceProperties")
 
@@ -529,7 +534,7 @@ public class Resources {
 										JSONObject resourceProperties = resourcePropertiesArray.getJSONObject(resourcePropCounter)
 
 										if (resourceProperties.get("value").length() == 0) {
-											println(sprintf(" -- %s", resourceProperties.get("name")))
+											outputString += sprintf(" -- %s\n", resourceProperties.get("name"))
 											emptyResourceProperties++
 										}
 									}
@@ -540,9 +545,10 @@ public class Resources {
 				}
 			}
 			if ((missingRolePropValue == true) || (missingResourcePropValue == true)) {
-				println("-------------------------------------------------------------------------------")
+				outputString += "-------------------------------------------------------------------------------\n"
 			}
 		}
+		return(outputString)
 	}
 
 
@@ -550,9 +556,10 @@ public class Resources {
 	public int getNumberFoundResourceRoleProperties() { return foundResourceRoleProperties }
 	
 
-	public void searchForProperty(String rootPath, String propertyName) {
+	public String searchForProperty(String rootPath, String propertyName) {
 		foundResourceProperties = 0
 		foundResourceRoleProperties = 0
+		def outputString = ""
 		
 		Resources.each { resourceItem ->
 			def detailsSlurper = new JsonSlurper()
@@ -624,22 +631,20 @@ public class Resources {
 				}
 			}
 
-
-
 			if ((foundRoleProp == true) || (foundResourceProp == true)) {
-				println("Resource name : " + detailsJSONObject.name)
+				outputString += "Resource name : " + detailsJSONObject.name + "\n"
 				if (requiredPathType.get("full")) {
-					println("Resource path : " + detailsJSONObject.path)
+					outputString += "Resource path : " + detailsJSONObject.path + "\n"
 				}
 				if (requiredPathType.get("relative")) {
 					if (detailsJSONObject.path.length() > rootPath.length()) {
 						def relativePath = detailsJSONObject.path.substring(rootPath.length())
-						println("Resource path : " + relativePath)
+						outputString += "Resource path : " + relativePath + "\n"
 					}
 				}
 			}
 			if (foundRoleProp == true) {
-				println("Resource role properties .....")
+				outputString += "Resource role properties .....\n"
 				keys = roleProps.keys()
 
 				if (keys.hasNext()) {
@@ -647,7 +652,7 @@ public class Resources {
 						String key = (String) keys.next();
 
 						if (key.contains(propertyName)) {
-							println(sprintf(" -- %-${displayKeyValuePadding}s -> %s", key, roleProps.get(key)))
+							outputString += sprintf(" -- %-${displayKeyValuePadding}s -> %s\n", key, roleProps.get(key))
 							foundResourceRoleProperties++
 						}
 					}
@@ -655,7 +660,7 @@ public class Resources {
 
 			}
 			if (foundResourceProp == true) {
-				println("Resource properties .....")
+				outputString += "Resource properties .....\n"
 				resourceProps = detailsJSONObject.get("resourceProperties")
 
 				if (resourceProps != null) {
@@ -672,7 +677,7 @@ public class Resources {
 									JSONObject resourceProperties = resourcePropertiesArray.getJSONObject(resourcePropCounter)
 
 									if (resourceProperties.get("name").contains(propertyName)) {
-										println(sprintf(" -- %-${displayKeyValuePadding}s -> %s", resourceProperties.get("name"), resourceProperties.get("value")))
+										outputString += sprintf(" -- %-${displayKeyValuePadding}s -> %s\n", resourceProperties.get("name"), resourceProperties.get("value"))
 										foundResourceProperties++
 									}
 								}
@@ -682,8 +687,9 @@ public class Resources {
 				}
 			}
 			if ((foundRoleProp == true) || (foundResourceProp == true)) {
-				println("-------------------------------------------------------------------------------")
+				outputString += "-------------------------------------------------------------------------------\n"
 			}
 		}
+		return(outputString)
 	}
 }
