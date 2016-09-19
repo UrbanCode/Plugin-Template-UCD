@@ -41,15 +41,29 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
+      mavenCentral()
 }
 
 dependencies {
-    // groovy-plugin-utils pulls down groovy-all as a transitive dependency for the 'compile' configuration
-    compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:1.0'
-    // This compiles the i18n-scraper script
-    compile localGroovy()
-//    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.6'
+    // Main Dependencies: Local
+    compile name: 'commons-collections'
+    compile name: 'groovyfx-8.0.0'
+    compile name: 'http-builder-0.7-uc'
+    compile name: 'HttpComponents-Util'
+    compile name: 'jettison-1.1'
+    compile name: 'udclient'
+    compile name: 'uDeployRestClient'
+    compile name: 'xml-resolver'
+
+    compile files ("lib/HttpComponents-Util.jar",	"lib/groovyfx-8.0.0.jar",	"lib/http-builder-0.7-uc.jar", "lib/jettison-1.1.jar", "lib/udclient.jar", "lib/commons-collections.jar", "lib/gson-2.2.4.jar", "lib/jarjar-1.3.jar", "lib/uDeployRestClient.jar")
+
+    compile group: 'com.googlecode.jarjar', name: 'jarjar', version: '1.3'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+
+    compile 'org.codehaus.groovy:groovy-all:2.3.6'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'
+
 //    testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 

@@ -2,3 +2,10 @@
 .gradle/
 build/
 lib/
+src/main/groovy/.DS_Store
+
+src/main/groovy/com/.DS_Store
+
+src/main/groovy/com/urbancode/.DS_Store
+
+src/main/groovy/com/urbancode/air/.DS_Store
