@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    compile files('lib/jenkins-cli.jar')
+    compile files('ext-lib/jenkins-cli.jar')
     // groovy-plugin-utils pulls down groovy-all as a transitive dependency for the 'compile' configuration
     compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:1.0'
     // This compiles the i18n-scraper script

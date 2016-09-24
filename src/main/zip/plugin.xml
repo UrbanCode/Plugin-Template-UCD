@@ -6,7 +6,7 @@ Email: vikrantsnirban@irisoftware.com
 -->
 <plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <header>
-    <identifier id="com.urbancode.air.plugin.jenkinsJobManager" name="Jenkins Job Manager" version="1"/>
+    <identifier id="com.urbancode.air.plugin.JenkinsJobManager" name="Jenkins Job Manager" version="1"/>
     <description>
         Plugin for managing jobs at Jenkins.
       </description>
