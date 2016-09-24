@@ -1,37 +1,221 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1"
-        xmlns:server="http://www.urbancode.com/PluginServerXMLSchema_v1"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!--
+Developer: Vikrant Singh
+Email: virkantsnirban@hotmail.com
+Email: vikrantsnirban@irisoftware.com
+-->
+<plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <header>
-    <identifier id="com.urbancode.air.plugin.helloworld" version="@API_VERSION@" name="Hello World"/>
-    <description>The Hello World plugin echoes out "Hello World"</description>
-    <tag>Template/Hello World</tag>
+    <identifier id="com.urbancode.air.plugin.jenkinsJobManager" name="Jenkins Job Manager" version="1"/>
+    <description>
+        Plugin for managing jobs at Jenkins.
+      </description>
+    <tag>Jenkins Job Manager</tag>
   </header>
-
-  <step-type name="Hello World">
-    <description>Echo out a "Hello World" style message</description>
+  <step-type name="Start Job">
+    <description>Start Jenkins Job</description>
     <properties>
-      <property name="name">
+	  <property name="action">
+        <property-ui hidden="true" type="textBox" default-value="start"/>
+      </property>
+      <property name="jobName" required="true">
         <property-ui type="textBox"
-                     label="Name"
-                     description="The name of the person you wish to say 'Hello' to."/>
+                     label="Job Name"
+                     description="Name of job to be started."/>
+      </property>
+      <property name="jenkinsURL" required="true">
+        <property-ui type="textBox"
+                     label="Jenkins Url"
+                     description="Jenkins Url for processing"/>
+					 <!--default-value="${p:process/jenkins.url}"-->
+					 
+      </property>
+      <property name="userName" required="true">
+        <property-ui type="textBox"
+                     label="User Name"
+                     description="The name of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userName}"-->
+      </property>
+	  <property name="userPassword" required="true">
+        <property-ui type="textBox"
+                     label="User Password"
+                     description="The Password of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userPassword}"-->
+      </property>
+	  <property name="checkSCMChanges">
+        <property-ui type="checkBox"
+                     label="Check for SCM changes"
+                     description="Check for SCM changes before starting the build, and if there's no change, exit without doing a build"/>
+      </property>
+	  <property name="waitUntilStart">
+        <property-ui type="checkBox"
+                     label="Wait until Start"
+                     description="Wait until the start of the job build."/>
+      </property>
+	  <property name="WaitUntilCompletion">
+        <property-ui type="checkBox"
+                     label="Wait until completion"
+                     description="Wait until the completion of the job build."/>
+      </property>
+	  <property name="printJobOutput">
+        <property-ui type="checkBox"
+                     label="Print Job output"
+                     description="Prints out the console output of the job."/>
       </property>
     </properties>
-    <post-processing>
-      <![CDATA[
+    <post-processing><![CDATA[
         if (properties.get("exitCode") != 0) {
             properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
         }
         else {
             properties.put("Status", "Success");
         }
-     ]]>
-    </post-processing>
-
+     ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="classes:lib/groovy-plugin-utils-1.0.jar"/>
-      <arg file="helloworld.groovy"/>
+      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg file="jenkinsJobManager.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+  <step-type name="Enable Job">
+    <description>Enable Jenkins Job</description>
+    <properties>
+	  <property name="action">
+        <property-ui hidden="true" type="textBox" default-value="enable"/>
+      </property>
+      <property name="jobName" required="true">
+        <property-ui type="textBox"
+                     label="Job Name"
+                     description="Name of job to be started."/>
+      </property>
+      <property name="jenkinsURL" required="true">
+        <property-ui type="textBox"
+                     label="Jenkins Url"
+                     description="Jenkins Url for processing"/>
+					 <!--default-value="${p:process/jenkins.url}"-->
+					 
+      </property>
+      <property name="userName" required="true">
+        <property-ui type="textBox"
+                     label="User Name"
+                     description="The name of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userName}"-->
+      </property>
+	  <property name="userPassword" required="true">
+        <property-ui type="textBox"
+                     label="User Password"
+                     description="The Password of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userPassword}"-->
+      </property>
+	 </properties>
+	 <post-processing><![CDATA[
+        if (properties.get("exitCode") != 0) {
+            properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+        }
+        else {
+            properties.put("Status", "Success");
+        }
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg file="jenkinsJobManager.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+  <step-type name="Disable Job">
+    <description>Disable Jenkins Job</description>
+    <properties>
+	  <property name="action">
+        <property-ui hidden="true" type="textBox" default-value="disable"/>
+      </property>
+      <property name="jobName" required="true">
+        <property-ui type="textBox"
+                     label="Job Name"
+                     description="Name of job to be started."/>
+      </property>
+      <property name="jenkinsURL" required="true">
+        <property-ui type="textBox"
+                     label="Jenkins Url"
+                     description="Jenkins Url for processing"/>
+					 <!--default-value="${p:process/jenkins.url}"-->
+					 
+      </property>
+      <property name="userName" required="true">
+        <property-ui type="textBox"
+                     label="User Name"
+                     description="The name of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userName}"-->
+      </property>
+	  <property name="userPassword" required="true">
+        <property-ui type="textBox"
+                     label="User Password"
+                     description="The Password of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userPassword}"-->
+      </property>
+	 </properties>
+	 <post-processing><![CDATA[
+        if (properties.get("exitCode") != 0) {
+            properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+        }
+        else {
+            properties.put("Status", "Success");
+        }
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg file="jenkinsJobManager.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+  <step-type name="Delete Job">
+    <description>Delete Jenkins Job</description>
+    <properties>
+	  <property name="action">
+        <property-ui hidden="true" type="textBox" default-value="delete"/>
+      </property>
+      <property name="jobName" required="true">
+        <property-ui type="textBox"
+                     label="Job Name"
+                     description="Name of job to be started."/>
+      </property>
+      <property name="jenkinsURL" required="true">
+        <property-ui type="textBox"
+                     label="Jenkins Url"
+                     description="Jenkins Url for processing"/>
+					 <!--default-value="${p:process/jenkins.url}"-->
+					 
+      </property>
+      <property name="userName" required="true">
+        <property-ui type="textBox"
+                     label="User Name"
+                     description="The name of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userName}"-->
+      </property>
+	  <property name="userPassword" required="true">
+        <property-ui type="textBox"
+                     label="User Password"
+                     description="The Password of the User for Jenkins"/>
+					 <!--default-value="${p:process/jenkins.userPassword}"-->
+      </property>
+	</properties>
+	 <post-processing><![CDATA[
+        if (properties.get("exitCode") != 0) {
+            properties.put(new java.lang.String("Status"), new java.lang.String("Failure"));
+        }
+        else {
+            properties.put("Status", "Success");
+        }
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
     </command>
