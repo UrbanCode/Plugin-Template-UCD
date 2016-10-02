@@ -42,12 +42,18 @@ configurations {
 
 repositories {
     mavenCentral()
+	maven {
+            url "http://repo.jenkins-ci.org/public"
+        }
 }
 
 dependencies {
-    compile files('ext-lib/jenkins-cli.jar')
+    //compile files('ext-lib/jenkins-cli.jar')
     // groovy-plugin-utils pulls down groovy-all as a transitive dependency for the 'compile' configuration
-    compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:1.0'
+   // compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:1.0'
+   compile group: 'com.ibm.urbancode.plugins', name: 'groovy-plugin-utils', version: '1.0'
+  // compile 'org.smartdeveloperhub.harvesters.ci.jenkins:ci-jenkins-cli:0.1.0'
+	 compile 'org.jenkins-ci.main:cli:1.651.3'
     // This compiles the i18n-scraper script
     compile localGroovy()
 //    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.6'

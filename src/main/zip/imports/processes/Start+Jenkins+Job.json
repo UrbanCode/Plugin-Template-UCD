@@ -1,0 +1,130 @@
+{
+    "name": "Start Jenkins Job",
+    "description": "This process wll start Jenkins job.",
+    "rootActivity": {
+        "edges": [
+            {
+                "to": "0e8d15a2be1c8d5b0098ef53e4a651",
+                "from": "Start Job",
+                "type": "ALWAYS",
+                "value": ""
+            },
+            {
+                "to": "Start Job",
+                "type": "ALWAYS",
+                "value": ""
+            }
+        ],
+        "offsets": [
+            {
+                "name": "Start Job",
+                "x": -51.5,
+                "y": 120,
+                "h": 50,
+                "w": 210
+            },
+            {
+                "name": "0e8d15a2be1c8d5b0098ef53e4a651",
+                "x": -5,
+                "y": 270,
+                "h": 50,
+                "w": 90
+            }
+        ],
+        "type": "graph",
+        "name": "4d4aa858-b4aa-4710-9fce-413261cbc82d",
+        "children": [
+            {
+                "type": "finish",
+                "name": "0e8d15a2be1c8d5b0098ef53e4a651",
+                "children": []
+            },
+            {
+                "allowFailure": false,
+                "useImpersonation": false,
+                "showHidden": false,
+                "impersonationUseSudo": false,
+                "commandName": "Start Job",
+                "pluginName": "Jenkins Job Manager",
+                "pluginVersion": 1,
+                "properties": {
+                    "action": "start",
+                    "jobName": "${jenkins.jobname}",
+                    "jenkinsURL": "${jenkins.url}",
+                    "userName": "${jenkins.username}",
+                    "userPassword": "${jenkins.password}",
+                    "checkSCMChanges": "false",
+                    "waitUntilStart": "false",
+                    "WaitUntilCompletion": "false",
+                    "printJobOutput": "false"
+                },
+                "type": "plugin",
+                "name": "Start Job",
+                "children": []
+            }
+        ]
+    },
+    "properties": [
+        {
+            "name": "contextType",
+            "value": "Resource",
+            "description": "",
+            "secure": false
+        },
+        {
+            "name": "defaultResourceId",
+            "value": "d893ea3c-5151-49d2-af2d-e85933016203",
+            "description": "",
+            "secure": false
+        },
+        {
+            "name": "workingDir",
+            "value": "${p:resource\/work.dir}\/${p:process.name}",
+            "description": "",
+            "secure": false
+        }
+    ],
+    "propDefs": [
+        {
+            "name": "jenkins.jobname",
+            "label": "Jenkins Job Name",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "${p:component\/jenkins.jobname}",
+            "required": true,
+            "description": "Jenkins Job Name",
+            "placeholder": ""
+        },
+        {
+            "name": "jenkins.url",
+            "label": "Jenkins Server URL",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "${p:component:\/jenkins.url}",
+            "required": true,
+            "description": "Jenkins Server URL",
+            "placeholder": ""
+        },
+        {
+            "name": "jenkins.username",
+            "label": "Jenkins User Name",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "${p:component\/jenkins.username}",
+            "required": true,
+            "description": "Jenkins User Name",
+            "placeholder": ""
+        },
+        {
+            "name": "jenkins.password",
+            "label": "Jenkins User Password",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "${p:component\/jenkins.password}",
+            "required": true,
+            "description": "Jenkins User Password",
+            "placeholder": ""
+        }
+    ],
+    "teamMappings": []
+}

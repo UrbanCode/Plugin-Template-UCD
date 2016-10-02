@@ -73,7 +73,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
@@ -120,7 +120,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
@@ -167,7 +167,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
@@ -214,7 +214,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="classes:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
