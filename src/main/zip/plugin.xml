@@ -6,11 +6,11 @@ Email: vikrantsnirban@irisoftware.com
 -->
 <plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <header>
-    <identifier id="com.urbancode.air.plugin.JenkinsJobManager" name="Jenkins Job Manager" version="1"/>
+    <identifier id="com.urbancode.air.plugin.JenkinsJobManager" name="Jenkins Job Manager" version="@API_VERSION@"/>
     <description>
-        Plugin for managing jobs at Jenkins.
+        Plugin for managing jobs on Jenkins.
       </description>
-    <tag>Jenkins Job Manager</tag>
+    <tag>Jenkins/Job</tag>
   </header>
   <step-type name="Start Job">
     <description>Start Jenkins Job</description>
@@ -28,7 +28,7 @@ Email: vikrantsnirban@irisoftware.com
                      label="Jenkins Url"
                      description="Jenkins Url for processing"/>
 					 <!--default-value="${p:process/jenkins.url}"-->
-					 
+
       </property>
       <property name="userName" required="true">
         <property-ui type="textBox"
@@ -37,7 +37,7 @@ Email: vikrantsnirban@irisoftware.com
 					 <!--default-value="${p:process/jenkins.userName}"-->
       </property>
 	  <property name="userPassword" required="true">
-        <property-ui type="textBox"
+        <property-ui type="secureBox"
                      label="User Password"
                      description="The Password of the User for Jenkins"/>
 					 <!--default-value="${p:process/jenkins.userPassword}"-->
@@ -73,7 +73,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
@@ -95,7 +95,7 @@ Email: vikrantsnirban@irisoftware.com
                      label="Jenkins Url"
                      description="Jenkins Url for processing"/>
 					 <!--default-value="${p:process/jenkins.url}"-->
-					 
+
       </property>
       <property name="userName" required="true">
         <property-ui type="textBox"
@@ -104,7 +104,7 @@ Email: vikrantsnirban@irisoftware.com
 					 <!--default-value="${p:process/jenkins.userName}"-->
       </property>
 	  <property name="userPassword" required="true">
-        <property-ui type="textBox"
+        <property-ui type="secureBox"
                      label="User Password"
                      description="The Password of the User for Jenkins"/>
 					 <!--default-value="${p:process/jenkins.userPassword}"-->
@@ -120,7 +120,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
@@ -142,7 +142,7 @@ Email: vikrantsnirban@irisoftware.com
                      label="Jenkins Url"
                      description="Jenkins Url for processing"/>
 					 <!--default-value="${p:process/jenkins.url}"-->
-					 
+
       </property>
       <property name="userName" required="true">
         <property-ui type="textBox"
@@ -151,7 +151,7 @@ Email: vikrantsnirban@irisoftware.com
 					 <!--default-value="${p:process/jenkins.userName}"-->
       </property>
 	  <property name="userPassword" required="true">
-        <property-ui type="textBox"
+        <property-ui type="secureBox"
                      label="User Password"
                      description="The Password of the User for Jenkins"/>
 					 <!--default-value="${p:process/jenkins.userPassword}"-->
@@ -167,7 +167,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
@@ -189,7 +189,7 @@ Email: vikrantsnirban@irisoftware.com
                      label="Jenkins Url"
                      description="Jenkins Url for processing"/>
 					 <!--default-value="${p:process/jenkins.url}"-->
-					 
+
       </property>
       <property name="userName" required="true">
         <property-ui type="textBox"
@@ -198,7 +198,7 @@ Email: vikrantsnirban@irisoftware.com
 					 <!--default-value="${p:process/jenkins.userName}"-->
       </property>
 	  <property name="userPassword" required="true">
-        <property-ui type="textBox"
+        <property-ui type="secureBox"
                      label="User Password"
                      description="The Password of the User for Jenkins"/>
 					 <!--default-value="${p:process/jenkins.userPassword}"-->
@@ -214,7 +214,7 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/jenkins-cli.jar"/>
+      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar"/>
       <arg file="jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
