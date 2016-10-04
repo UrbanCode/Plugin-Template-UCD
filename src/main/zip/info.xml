@@ -34,11 +34,11 @@ Email: vikrantsnirban@irisoftware.com
   </meta-html>
 
   <!-- Do not change the release-version, the build process injects it. -->
-  <release-version>1.0</release-version>
+  <release-version>@RELEASE_VERSION@</release-version>
 
   <release-notes>
 
-      <release-note plugin-version="1.0">
+      <release-note plugin-version="1">
 			This is the initial release of this plugin.
       </release-note>
   </release-notes>

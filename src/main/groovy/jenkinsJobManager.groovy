@@ -39,7 +39,7 @@ switch (action){
 
 void startJob(String jenkinsURL,String userName,String userPassword,String jobName, boolean checkSCMChanges, boolean waitUntilStart, boolean WaitUntilCompletion, boolean printJobOutput){
 	String[] params = null
-	
+
 		params = ["-s",jenkinsURL,"build",jobName]
 	if (checkSCMChanges){
 		params = ["-s",jenkinsURL,"build",jobName,"-c","--username",userName,"--password",userPassword]
@@ -56,24 +56,28 @@ void startJob(String jenkinsURL,String userName,String userPassword,String jobNa
 	if (printJobOutput){
 		params = ["-s",jenkinsURL,"build",jobName,"-f","-v","--username",userName,"--password",userPassword]
 	}
+    println "[Action] Running Command: java -jar <jenkins-cli.jar> " + params.join(" ")
 	CLI._main(params)
 	println("Job started successfully.")
 }
 
 void enableJob(String jenkinsURL,String userName,String userPassword,String jobName){
 	String[] params = ["-s",jenkinsURL,"enable-job",jobName,"--username",userName,"--password",userPassword]
+    println "[Action] Running Command: java -jar <jenkins-cli.jar> " + params.join(" ")
 	CLI._main(params)
 	println("Job enabled successfully.")
 }
 
 void disableJob(String jenkinsURL,String userName,String userPassword,String jobName){
 	String[] params = ["-s",jenkinsURL,"disable-job",jobName,"--username",userName,"--password",userPassword]
+    println "[Action] Running Command: java -jar <jenkins-cli.jar> " + params.join(" ")
 	CLI._main(params)
 	println("Job disabled successfully.")
 }
 
 void deletJob(String jenkinsURL,String userName,String userPassword,String jobName){
 	String[] params = ["-s",jenkinsURL,"delete-job",jobName,"--username",userName,"--password",userPassword]
+    println "[Action] Running Command: java -jar <jenkins-cli.jar> " + params.join(" ")
 	CLI._main(params)
 	println("Job deleted successfully.")
 }
