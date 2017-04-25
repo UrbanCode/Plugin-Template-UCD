@@ -3,7 +3,7 @@
         xmlns:server="http://www.urbancode.com/PluginServerXMLSchema_v1"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <header>
-    <identifier id="com.urbancode.air.plugin.helloworld" version="@API_VERSION@" name="Hello World"/>
+    <identifier id="com.urbancode.air.plugin.helloworld" version="1" name="Hello World"/>
     <description>The Hello World plugin echoes out "Hello World"</description>
     <tag>Template/Hello World</tag>
   </header>
